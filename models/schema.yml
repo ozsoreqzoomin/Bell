@@ -17,3 +17,19 @@ models:
       - name: CURRENT_ARR
         tests:
           - not_null
+
+  - name: Dim_Accounts
+    columns:
+
+      - name: ID
+        tests:
+          - not_null
+          - unique
+
+  - name: Dim_Dates
+    columns:
+
+      - name: Date
+        tests:
+          - not_null
+          - unique
