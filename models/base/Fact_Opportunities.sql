@@ -1,0 +1,1 @@
+select * from SALESFORCE2.Opportunity
