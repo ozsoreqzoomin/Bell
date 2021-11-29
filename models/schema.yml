@@ -40,3 +40,16 @@ models:
           - not_null
           - unique
 
+exposures:
+  
+  - name: ARR Dashboard
+    type: dashboard
+    maturity: low
+    url: https://bi.tool/dashboards/1
+    description: POC Dashboard
+    depends_on:
+      - ref('Fact_AccountSubscriptions')
+      
+    owner:
+      name: Oz Soreq
+      email: oz.soreq@zoominsoftware.com
