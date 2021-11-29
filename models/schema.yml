@@ -5,6 +5,12 @@ version: 2
     # not_null: the order_id column in the orders model should not contain null values
     # accepted_values: the status column in the orders should be one of 'placed', 'shipped', 'completed', or 'returned'
     # relationships: each customer_id in the orders model exists as an id in the customers table (also known as referential integrity)
+sources:
+  - name: SALESFORCE2
+    tables:
+      - name: Account
+      - name: Dim_Date
+      - name: Opportunity
 
 models:
   - name: Fact_AccountSubscriptions
@@ -33,3 +39,18 @@ models:
         tests:
           - not_null
           - unique
+
+exposures:
+  # maturity values: high, medium, low
+  - name: POC_Finance_Dashboard
+    type: dashboard
+    maturity: low
+    url: https://bi.tool/dashboards/1
+    description: POC dashboard for Finance team
+    
+    depends_on:
+      - ref('Fact_AccountSubscriptions')
+      
+    owner:
+      name: Oz Soreq
+      email: oz.soreq@zoominsoftware.com

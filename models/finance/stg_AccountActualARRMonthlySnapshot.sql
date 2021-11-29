@@ -1,13 +1,13 @@
 with Opportunity as (
-    select * from {{ ref('Fact_Opportunities')}}
+    select * from {{ source('SALESFORCE2', 'Opportunity') }}
 ),
 
 Dates as (
-    select * from {{ ref('Dim_Dates')}}
+    select * from {{ source('SALESFORCE2', 'Dim_Date') }}
 ),
 
 Accounts as (
-    select * from {{ ref('Dim_Accounts')}}
+    select * from {{ source('SALESFORCE2', 'Account') }}
 ),
 
 Account_ARR_MonthlySnapshots as (        

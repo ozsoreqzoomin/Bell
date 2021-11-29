@@ -1,1 +1,1 @@
-select * from SALESFORCE2.Dim_Date
+select * from {{ source('SALESFORCE2', 'Dim_Date') }}
