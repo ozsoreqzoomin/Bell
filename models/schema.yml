@@ -41,13 +41,12 @@ models:
           - unique
 
 exposures:
-  # maturity values: high, medium, low
-  - name: POC_Finance_Dashboard
+  
+  - name: ARR Dashboard
     type: dashboard
     maturity: low
     url: https://bi.tool/dashboards/1
-    description: POC dashboard for Finance team
-    
+    description: POC Dashboard
     depends_on:
       - ref('Fact_AccountSubscriptions')
       
