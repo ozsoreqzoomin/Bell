@@ -1,1 +1,1 @@
-select * from SALESFORCE2.Opportunity
+select * from {{ source('SALESFORCE2', 'Opportunity') }}

@@ -1,1 +1,1 @@
-select * from SALESFORCE2.Account
+select * from {{ source('SALESFORCE2', 'Account') }}
