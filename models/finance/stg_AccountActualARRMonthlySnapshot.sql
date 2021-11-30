@@ -1,13 +1,14 @@
 with Opportunity as (
-    select * from {{ source('SALESFORCE2', 'Opportunity') }}
+    select account_id,SUBSCRIPTION_STATUS_C  AccountStatus,SUBSCRIPTION_END_DATE_C  End_Date, SUBSCRIPTION_START_DATE_C  Start_Date, Close_Date, Stage_Name, Total_ARR_C,type
+      from {{ ref('Fact_Opportunities')}}
 ),
 
 Dates as (
-    select * from {{ source('SALESFORCE2', 'Dim_Date') }}
+    select * from {{ ref('Dim_Dates')}}
 ),
 
 Accounts as (
-    select * from {{ source('SALESFORCE2', 'Account') }}
+    select * from {{ ref('Dim_Accounts')}}
 ),
 
 Account_ARR_MonthlySnapshots as (        
@@ -17,12 +18,12 @@ Case when LEAD(Sum(Total_ARR_C)) over (Partition by account_id order by Date des
   RANK() OVER (PARTITION BY account_id ORDER BY Date DESC) AS DESCRank
 
 from
- (select D.Date,account_id,SUBSCRIPTION_STATUS_C  AccountStatus,SUBSCRIPTION_END_DATE_C  End_Date, SUBSCRIPTION_START_DATE_C  Start_Date, Close_Date, Stage_Name, Total_ARR_C,type 
+ (select D.Date,account_id,AccountStatus,End_Date,Start_Date, Close_Date, Stage_Name, Total_ARR_C,type 
   from Opportunity o 
   left join
   (select distinct DATE from Dates where DAY(DATE) = 1
     and DATE > '2015-01-01' AND DATE < current_date()) D
-    on D.Date < o.SUBSCRIPTION_END_DATE_C AND D.DATE > o.SUBSCRIPTION_START_DATE_C
+    on D.Date < o.End_Date AND D.DATE > o.Start_Date
   where 
   --account_id in ('0012p0000357h44AAA') and 
   stage_name in ('Closed Won')) a
