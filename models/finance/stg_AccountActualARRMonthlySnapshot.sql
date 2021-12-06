@@ -23,7 +23,7 @@ from
   left join
   (select distinct DATE from Dates where DAY(DATE) = 1
     and DATE > '2015-01-01' AND DATE < current_date()) D
-    on D.Date < o.End_Date AND D.DATE > o.Start_Date
+    on D.Date <= o.End_Date AND D.DATE >= o.Start_Date
   where 
   --account_id in ('0012p0000357h44AAA') and 
   stage_name in ('Closed Won')) a
