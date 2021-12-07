@@ -1,1 +1,1 @@
-select * from {{ source('SALESFORCE2', 'Dim_Date') }}
+select * from {{ ref('base_Dates')}}

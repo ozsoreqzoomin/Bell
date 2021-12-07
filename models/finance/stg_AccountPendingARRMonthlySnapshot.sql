@@ -3,7 +3,7 @@ with ActualARR as (
 ),
   
 Date as (
-  select Date from SALESFORCE2.Dim_Date where Date < current_date() and Day(Date) = 1
+  select Date from {{ ref('base_Dates')}} where Date < current_date() and Day(Date) = 1
 ),
 
 final as (

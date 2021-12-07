@@ -1,0 +1,1 @@
+select * from {{ source('SALESFORCE2', 'Account') }}
