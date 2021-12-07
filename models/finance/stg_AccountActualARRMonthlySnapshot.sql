@@ -1,14 +1,14 @@
 with Opportunity as (
     select account_id,SUBSCRIPTION_STATUS_C  AccountStatus,SUBSCRIPTION_END_DATE_C  End_Date, SUBSCRIPTION_START_DATE_C  Start_Date, Close_Date, Stage_Name, Total_ARR_C,type
-      from {{ ref('Fact_Opportunities')}}
+      from {{ ref('base_Opportunity')}}
 ),
 
 Dates as (
-    select * from {{ ref('Dim_Dates')}}
+    select * from {{ ref('base_Dates')}}
 ),
 
 Accounts as (
-    select * from {{ ref('Dim_Accounts')}}
+    select * from {{ ref('base_Accounts')}}
 ),
 
 Account_ARR_MonthlySnapshots as (        

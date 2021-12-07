@@ -11,6 +11,7 @@ version: 2
     # relationships: each customer_id in the orders model exists as an id in the customers table (also known as referential integrity)
 sources:
   - name: SALESFORCE2
+    database: FIVETRAN_DATABASE
     tables:
       - name: Account
       - name: Dim_Date

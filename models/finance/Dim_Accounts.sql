@@ -1,1 +1,1 @@
-select * from {{ source('SALESFORCE2', 'Account') }}
+select * from {{ ref('base_Accounts')}}
