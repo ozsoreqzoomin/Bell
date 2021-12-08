@@ -35,4 +35,5 @@ models:
   bonzai:
       # Applies to all files under models/example/
       2. base:
-          +schema: base
+        salesforce:
+          +schema: base_salesforce
