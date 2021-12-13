@@ -14,12 +14,12 @@ on aam.date = pam.date AND aam.account_id = pam.account_id
   )
 )
 
-select a.Name, a.Type as Customer_Type, ARRMonthlyChangesSteps.Date, ARRMonthlyChangesSteps.Account_ID, ARRMonthlyChangesSteps.ARR,
+select a.Name Customer_Name, a.Type as Customer_Type, ARRMonthlyChangesSteps.Date, ARRMonthlyChangesSteps.Account_ID, ARRMonthlyChangesSteps.ARR,
 CASE WHEN Customer_Type = 'Former Customer' AND RANK() OVER (PARTITION BY account_id ORDER BY Date DESC) = 1 then 'Churn'
 WHEN RANK() OVER (PARTITION BY account_id ORDER BY Date ASC) = 1 then 'New'
 WHEN ARR < 0 then 'Downgrade'
 WHEN ARR > 0 AND ARRMonthlyChangesSteps.Type = 'Not mapped' then 'Expansion' 
-ELSE ARRMonthlyChangesSteps.Type end as Type
+ELSE ARRMonthlyChangesSteps.Type end as ARR_Change_Type
 from 
 (
   select Date, Account_ID, Actual_ARR - ARR_Change - Pending_ARR as ARR, 'Flat ARR' as Type from ARRMonthlyChangesFlat
