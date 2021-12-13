@@ -7,14 +7,14 @@ version: 2
     # relationships: each customer_id in the orders model exists as an id in the customers table (also known as referential integrity)
 
 models:
-  - name: Fact_AccountSubscriptions
+  - name: Fact_MonthlyARR
     columns:
 
-      - name: ID
+      - name: Name
         tests:
           - not_null
 
-      - name: CURRENT_ARR
+      - name: ARR
         tests:
           - not_null
 
@@ -26,7 +26,9 @@ exposures:
     url: https://bi.tool/dashboards/1
     description: POC Dashboard
     depends_on:
-      - ref('Fact_AccountSubscriptions')
+      - ref('Fact_MonthlyARR')
+      - ref('Dim_Dates')
+      - ref('Dim_Accounts')
       
     owner:
       name: Oz Soreq

@@ -37,3 +37,8 @@ models:
       2. base:
         salesforce:
           +schema: base_salesforce
+      3. staging:
+          +schema: staging
+      4. marts:
+        finance:
+          +schema: mart_finance
