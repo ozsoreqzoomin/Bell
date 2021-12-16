@@ -1,0 +1,54 @@
+with ARRMonthlyChangesFlat as (
+  
+select *, Active_ARR + Pending_ARR as Actual_ARR,
+CASE WHEN LEAD(Actual_ARR) over (Partition by Account_ID order by Date desc) is NULL then 0 else LEAD(Actual_ARR) over (Partition by Account_ID order by Date desc) end as Previous_ARR,
+CASE WHEN Previous_ARR = 0 then Actual_ARR else Actual_ARR - Previous_ARR end as ARR_Change
+  from 
+  
+  (
+select coalesce(aam.date, pam.date) Date, coalesce(aam.account_id, pam.account_id) Account_ID,
+case when Active_ARR is NULL then 0 else Active_ARR end as Active_ARR,
+case when Pending_ARR is NULL then 0 else Pending_ARR end as Pending_ARR
+from "ANALYTICS_POC"."STAGING"."STG_ACTIVEARRMONTHLY"  aam full outer join "ANALYTICS_POC"."STAGING"."STG_PENDINGARRMONTHLY" pam
+on aam.date = pam.date AND aam.account_id = pam.account_id 
+  )
+),
+
+Churns as (
+Select Customer_Name, Customer_Type, Date, Account_ID, ARR, ARR_Change_Type from
+  (
+      select a.Name Customer_Name, a.Type as Customer_Type, ARRMonthlyChangesFlat.Date, ARRMonthlyChangesFlat.Account_ID, -(Actual_ARR + Pending_ARR) ARR, 'Churn' as ARR_Change_Type,
+      RANK() OVER (PARTITION BY account_id ORDER BY Date DESC) as DescRank
+      from ARRMonthlyChangesFlat
+      join
+      "ANALYTICS_POC"."BASE_SALESFORCE"."BASE_ACCOUNTS" a
+      on ARRMonthlyChangesFlat.account_id = a.ID
+      where Customer_Type = 'Former Customer'
+    )
+  where DescRank = 1
+)
+
+
+select a.Name Customer_Name, a.Type as Customer_Type, ARRMonthlyChangesSteps.Date, ARRMonthlyChangesSteps.Account_ID, ARRMonthlyChangesSteps.ARR,
+CASE WHEN RANK() OVER (PARTITION BY account_id ORDER BY Date ASC) = 1 then 'New'
+WHEN ARR < 0 then 'Downgrade'
+WHEN ARR > 0 AND ARRMonthlyChangesSteps.Type = 'Not mapped' then 'Expansion' 
+ELSE ARRMonthlyChangesSteps.Type end as ARR_Change_Type
+from 
+(
+  select Date, Account_ID, Actual_ARR - ARR_Change - Pending_ARR as ARR, 'Flat ARR' as Type from ARRMonthlyChangesFlat
+  union all
+  select Date, Account_ID, Pending_ARR, 'Pending' as Type from ARRMonthlyChangesFlat
+  union all
+  select Date, Account_ID, ARR_Change, 'Not mapped' as Type from ARRMonthlyChangesFlat 
+) ARRMonthlyChangesSteps 
+join
+"ANALYTICS_POC"."BASE_SALESFORCE"."BASE_ACCOUNTS" a
+on ARRMonthlyChangesSteps.account_id = a.ID
+ where ARR != 0 
+union all
+select * from Churns
+
+ -- where Customer_Type = 'Former Customer'
+ 
+ 
