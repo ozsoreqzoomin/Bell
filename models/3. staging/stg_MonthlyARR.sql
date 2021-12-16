@@ -9,7 +9,7 @@ CASE WHEN Previous_ARR = 0 then Actual_ARR else Actual_ARR - Previous_ARR end as
 select coalesce(aam.date, pam.date) Date, coalesce(aam.account_id, pam.account_id) Account_ID,
 case when Active_ARR is NULL then 0 else Active_ARR end as Active_ARR,
 case when Pending_ARR is NULL then 0 else Pending_ARR end as Pending_ARR
-from "ANALYTICS_POC"."STAGING"."STG_ACTIVEARRMONTHLY"  aam full outer join "ANALYTICS_POC"."STAGING"."STG_PENDINGARRMONTHLY" pam
+from {{ref('stg_ActiveARRMonthly')}}  aam full outer join {{ref('stg_PendingARRMonthly')}} pam
 on aam.date = pam.date AND aam.account_id = pam.account_id 
   )
 ),
@@ -21,7 +21,7 @@ Select Customer_Name, Customer_Type, Date, Account_ID, ARR, ARR_Change_Type from
       RANK() OVER (PARTITION BY account_id ORDER BY Date DESC) as DescRank
       from ARRMonthlyChangesFlat
       join
-      "ANALYTICS_POC"."BASE_SALESFORCE"."BASE_ACCOUNTS" a
+      {{ref('base_Accounts')}} a
       on ARRMonthlyChangesFlat.account_id = a.ID
       where Customer_Type = 'Former Customer'
     )
@@ -43,7 +43,7 @@ from
   select Date, Account_ID, ARR_Change, 'Not mapped' as Type from ARRMonthlyChangesFlat 
 ) ARRMonthlyChangesSteps 
 join
-"ANALYTICS_POC"."BASE_SALESFORCE"."BASE_ACCOUNTS" a
+{{ref('base_Accounts')}} a
 on ARRMonthlyChangesSteps.account_id = a.ID
  where ARR != 0 
 union all
