@@ -10,10 +10,6 @@ models:
   - name: Fact_MonthlyARR
     columns:
 
-      - name: Name
-        tests:
-          - not_null
-
       - name: ARR
         tests:
           - not_null

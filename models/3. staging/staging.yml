@@ -5,3 +5,13 @@
     # not_null: the order_id column in the orders model should not contain null values
     # accepted_values: the status column in the orders should be one of 'placed', 'shipped', 'completed', or 'returned'
     # relationships: each customer_id in the orders model exists as an id in the customers table (also known as referential integrity)
+
+models:
+  - name: stg_MonthlyARR
+    columns:
+
+      - name: ARR
+        tests:
+          - not_null
+          - is_negative_where: {condition: "ARR_Change_Type in ('Churn','Downgrade')"}
+          - is_positive_where: {condition: "ARR_Change_Type in ('Expansion','New','Pending','Flat ARR')"}
