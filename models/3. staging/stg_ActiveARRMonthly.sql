@@ -10,5 +10,4 @@ from
   where 
   --account_id in ('0012p0000357h44AAA') and 
   stage_name in ('Closed Won')) a
-  where Date is not NULL
   group by 1,2 order by Date desc
