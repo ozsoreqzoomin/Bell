@@ -6,8 +6,9 @@ from
   left join
   (select distinct DATE from {{ ref('base_Dates')}} where DAY(DATE) = 1
     and DATE > '2015-01-01' AND DATE < current_date()) D
-    on D.Date < o.SUBSCRIPTION_END_DATE_C AND D.DATE > o.SUBSCRIPTION_START_DATE_C
+    on D.Date <= o.SUBSCRIPTION_END_DATE_C AND D.DATE >= o.SUBSCRIPTION_START_DATE_C
   where 
   --account_id in ('0012p0000357h44AAA') and 
   stage_name in ('Closed Won')) a
+  where Date is not NULL
   group by 1,2 order by Date desc
