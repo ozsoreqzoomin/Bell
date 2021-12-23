@@ -29,7 +29,7 @@ Select Customer_Name, Customer_Type, Date, Account_ID, ARR, ARR_Change_Type from
 )
 
 
-select a.Name Customer_Name, a.Type as Customer_Type, ARRMonthlyChangesSteps.Date, ARRMonthlyChangesSteps.Account_ID, ARRMonthlyChangesSteps.ARR,
+select a.Name Account_Name, a.Type as Account_Type, ARRMonthlyChangesSteps.Date Snapshot_Date, ARRMonthlyChangesSteps.Account_ID, ARRMonthlyChangesSteps.ARR,
 CASE WHEN RANK() OVER (PARTITION BY account_id ORDER BY Date ASC) = 1 then 'New'
 WHEN ARR < 0 then 'Downgrade'
 WHEN ARR > 0 AND ARRMonthlyChangesSteps.Type = 'Not mapped' then 'Expansion' 
