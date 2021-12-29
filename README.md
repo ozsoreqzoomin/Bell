@@ -1,7 +1,5 @@
 DBT Workflow
-### Using the starter project
-
-Try running the following commands:
+Possible commands through DBT
 - dbt run
 - dbt test
 
