@@ -1,4 +1,4 @@
-select a.*, arr.Date as FirstSubscriptionDate from {{ ref('base_Accounts')}} a
+select a.*, arr.SNAPSHOT_DATE as FirstSubscriptionDate from {{ ref('base_Accounts')}} a
  left join
  {{ ref('stg_MonthlyARR')}} arr
   on
