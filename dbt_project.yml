@@ -37,6 +37,8 @@ models:
       2-base:
         salesforce:
           +schema: base_salesforce
+        static_files:
+          +schema: base_static_files
       3-staging:
           +schema: staging
       4-marts:
