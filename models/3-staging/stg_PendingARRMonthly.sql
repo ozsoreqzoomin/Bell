@@ -1,29 +1,79 @@
- 
-with MaxPendingOpp as (
-  
-  select D.Date,account_id,o.ID,SUBSCRIPTION_STATUS_C as SUBSCRIPTION_STATUS,SUBSCRIPTION_END_DATE_C  End_Date, SUBSCRIPTION_START_DATE_C  Start_Date, Close_Date, Stage_Name, Total_ARR_C,type, RANK() OVER (PARTITION BY account_id ORDER BY Date DESC) AS DESCRank 
-  from {{ ref('base_Opportunity')}} o 
-  left join
-  (select distinct DATE from {{ ref('base_Dates')}} where DAY(DATE) = 1
-    and DATE > '2015-01-01' AND DATE < current_date()) D
-    on D.Date < o.SUBSCRIPTION_END_DATE_C AND D.DATE > o.SUBSCRIPTION_START_DATE_C
-  where 
+WITH MaxPendingOpp AS ( 
+  SELECT
+  D.Date,
+  O.Account_ID,
+  O.Opportunity_ID,
+  O.Subscription_Status,
+  O.Subscription_End_Date,
+  O.Subscription_Start_Date,
+  O.Close_Date,
+  O.Stage_Name,
+  O.Total_ARR,
+  O.Type,
+  RANK() OVER (PARTITION BY Account_ID ORDER BY Date DESC) AS DESCRank 
+  FROM
+  {{ref('base_Opportunity')}} O
+  LEFT JOIN
+  (
+    SELECT
+    DISTINCT DATE
+    FROM
+    {{ref('base_Dates')}} 
+    WHERE
+    DAY(DATE) = 1
+    ) D
+    ON
+    D.Date < O.Subscription_End_Date AND D.Date > O.Subscription_Start_Date
+  WHERE 
   --account_id in ('001D000001jVeZ9IAK') and 
-  stage_name in ('Closed Won') and SUBSCRIPTION_STATUS_C = 'Expired - Pending Renewal'
-
+  Stage_Name in ('Closed Won') and Subscription_Status = 'Expired - Pending Renewal'
 ),
   
-d as (
-  select Date from {{ ref('base_Dates')}} where Date < current_date() and Day(Date) = 1
+D AS (
+  SELECT
+  Date 
+  FROM
+  {{ref('base_Dates')}} 
+  WHERE
+  Date < CURRENT_DATE() AND Day(Date) = 1
 ),
   
-final as (
-select d.date, MaxPendingOpp.Account_ID, SUBSCRIPTION_STATUS, Total_ARR_C as Pending_ARR, Type, Stage_Name  from d
-join
-(select * from MaxPendingOpp where DESCRANK = 1) MaxPendingOpp
-on
-MaxPendingOpp.Date < d.Date
+final AS (
+SELECT
+D.Date,
+MaxPendingOpp.Account_ID,
+MaxPendingOpp.Subscription_Status, 
+MaxPendingOpp.Total_ARR as Pending_ARR,
+MaxPendingOpp.Type,
+MaxPendingOpp.Stage_Name 
+FROM D
+JOIN
+(
+  SELECT 
+  Date,
+  Account_ID,
+  Opportunity_ID,
+  Subscription_Status,
+  Subscription_End_Date,
+  Subscription_Start_Date,
+  Close_Date,
+  Stage_Name,
+  Total_ARR,
+  Type,
+  DESCRank 
+  FROM
+  MaxPendingOpp 
+  WHERE 
+  DESCRANK = 1
+) MaxPendingOpp
+ON
+MaxPendingOpp.Date < D.Date
 )
 
-select date, Account_ID, sum(Pending_ARR) as Pending_ARR from final
-group by 1,2
+SELECT
+Date,
+Account_ID,
+SUM(Pending_ARR) as Pending_ARR
+FROM
+final
+GROUP BY 1,2
