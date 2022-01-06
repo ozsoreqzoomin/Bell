@@ -1,4 +1,5 @@
-SELECT a.Account_Name,
+SELECT 
+    Account_Name,
     Account_Type,
     Snapshot_Date,
     Account_ID,
