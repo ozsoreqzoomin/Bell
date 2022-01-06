@@ -9,7 +9,6 @@
 models:
   - name: stg_MonthlyARR
     columns:
-
       - name: ARR
         tests:
           - not_null
