@@ -1,5 +1,5 @@
 SELECT
-    DateNum,
+    Numeric_Date,
     Date
 FROM
     {{ref('base_Dates')}}
