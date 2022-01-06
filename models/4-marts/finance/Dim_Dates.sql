@@ -1,1 +1,5 @@
-select * from {{ ref('base_Dates')}}
+SELECT
+    DateNum,
+    Date
+FROM
+    {{ref('base_Dates')}}

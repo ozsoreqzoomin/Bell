@@ -1,1 +1,16 @@
-select * from {{ ref('base_Opportunity')}}
+SELECT 
+    Opportunity_ID,
+    Opportunity_Name,
+    Type,
+    Account_ID,
+    Close_Date,
+    Stage_Name,
+    Create_Date,
+    Probability,
+    Total_ARR,
+    Kickoff_Status,
+    Subscription_Status,
+    Subscription_Start_Date,
+    Subscription_End_Date
+FROM
+{{ref('base_Opportunity')}}
