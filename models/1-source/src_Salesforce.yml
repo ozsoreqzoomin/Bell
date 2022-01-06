@@ -23,7 +23,6 @@ models:
         tests:
           - not_null
           - unique
-
   - name: src_Opportunity
     columns:
       - name: ID
