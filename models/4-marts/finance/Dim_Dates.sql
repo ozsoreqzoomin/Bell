@@ -1,1 +1,5 @@
-select * from {{ ref('base_Dates')}}
+SELECT
+    Numeric_Date,
+    Date
+FROM
+    {{ref('base_Dates')}}

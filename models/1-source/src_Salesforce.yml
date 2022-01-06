@@ -10,26 +10,23 @@ version: 2
     # accepted_values: the status column in the orders should be one of 'placed', 'shipped', 'completed', or 'returned'
     # relationships: each customer_id in the orders model exists as an id in the customers table (also known as referential integrity)
 sources:
-  - name: SALESFORCE2
-    database: FIVETRAN_DATABASE
+  - name: SALESFORCE
+    database: SOURCES
     tables:
-      - name: Account
-      - name: Dim_Date
-      - name: Opportunity
+      - name: src_Account
+      - name: src_Opportunity
 
 models:
-  - name: Dim_Accounts
+  - name: src_Account
     columns:
-
       - name: ID
         tests:
           - not_null
           - unique
 
-  - name: Dim_Dates
+  - name: src_Opportunity
     columns:
-
-      - name: Date
+      - name: ID
         tests:
           - not_null
           - unique
