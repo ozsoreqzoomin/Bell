@@ -2,7 +2,7 @@ version: 2
 
 # src is a reference to a table that exist in the DWH
 # the source table is holds raw data that didn't go through cleansing
-# src.yml should include: tests, documentation, & definitions
+# src.yml should include: documentation, & definitions
 
 # possible tests -
     # unique: the order_id column in the orders model should be unique
@@ -15,17 +15,3 @@ sources:
     tables:
       - name: src_Account
       - name: src_Opportunity
-
-models:
-  - name: src_Account
-    columns:
-      - name: ID
-        tests:
-          - not_null
-          - unique
-  - name: src_Opportunity
-    columns:
-      - name: ID
-        tests:
-          - not_null
-          - unique
