@@ -1,0 +1,39 @@
+version: 2
+
+# base folder should contain tables/views that has:
+    # 1:1 association to the src tables
+    # casting columns
+    # renaming columns
+    # perform data cleansing activities including:
+        # data cleaning
+        # data types
+        # formats - NY vs New-York
+        # accuracy - DD/MM/YYYY input when the format is MM/DD/YYYY
+        # typos
+        # parsing dates
+        # file encodings
+        # null handling
+        # handle missing data
+        # remove duplicate
+        # dummy variables
+# base.yml should include: tests, documentation, & definitions
+
+# possible tests -
+    # unique: the order_id column in the orders model should be unique
+    # not_null: the order_id column in the orders model should not contain null values
+    # accepted_values: the status column in the orders should be one of 'placed', 'shipped', 'completed', or 'returned'
+    # relationships: each customer_id in the orders model exists as an id in the customers table (also known as referential integrity)
+
+models:
+  - name: base_Accounts
+    columns:
+      - name: Account_ID
+        tests:
+          - not_null
+          - unique
+  - name: base_Opportunity
+    columns:
+      - name: Opportunity_ID
+        tests:
+          - not_null
+          - unique

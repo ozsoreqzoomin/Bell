@@ -23,3 +23,5 @@ version: 2
     # not_null: the order_id column in the orders model should not contain null values
     # accepted_values: the status column in the orders should be one of 'placed', 'shipped', 'completed', or 'returned'
     # relationships: each customer_id in the orders model exists as an id in the customers table (also known as referential integrity)
+
+    
